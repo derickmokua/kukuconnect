@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
+import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 
@@ -15,7 +15,7 @@ export async function POST(req: Request) {
             );
         }
 
-        let userId = session?.user?.id;
+        let userId = (session?.user as any)?.id;
 
         // If no user session, check if user exists by email, or create a guest user (optional, for now we require login or just store as guest if we modify schema, but schema requires userId for Order. Wait, schema has userId. So we must have a user.)
         // Actually, for now, let's assume we only save to DB if logged in. Or we can create a "Guest" user.

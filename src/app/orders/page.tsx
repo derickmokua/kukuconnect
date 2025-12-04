@@ -1,8 +1,9 @@
-import { getServerSession } from "next-auth";
+import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { Order, OrderItem } from "@prisma/client";
 
 export default async function OrdersPage() {
     const session = await getServerSession(authOptions);
@@ -37,7 +38,7 @@ export default async function OrdersPage() {
                     </div>
                 ) : (
                     <div className="space-y-6">
-                        {orders.map((order) => (
+                        {orders.map((order: Order & { items: OrderItem[] }) => (
                             <div key={order.id} className="bg-white shadow overflow-hidden sm:rounded-lg">
                                 <div className="px-4 py-5 sm:px-6 flex justify-between items-center bg-gray-50 border-b border-gray-200">
                                     <div>
@@ -62,7 +63,7 @@ export default async function OrdersPage() {
                                 </div>
                                 <div className="px-4 py-5 sm:p-6">
                                     <div className="flex justify-between items-center">
-                                        <p className="text-gray-700">Total Items: {order.items.reduce((acc, item) => acc + item.quantity, 0)}</p>
+                                        <p className="text-gray-700">Total Items: {order.items.reduce((acc: number, item: OrderItem) => acc + item.quantity, 0)}</p>
                                         <p className="text-xl font-bold text-gray-900">KES {order.total.toLocaleString()}</p>
                                     </div>
                                 </div>

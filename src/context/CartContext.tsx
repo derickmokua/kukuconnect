@@ -33,7 +33,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     const [isCartOpen, setIsCartOpen] = useState(false);
 
     // Determine storage key based on user session
-    const cartKey = session?.user?.id ? `kukuconnect-cart-${session.user.id}` : 'kukuconnect-cart-guest';
+    const cartKey = (session?.user as any)?.id ? `kukuconnect-cart-${(session.user as any).id}` : 'kukuconnect-cart-guest';
 
     // Load cart from local storage when session changes or on mount
     useEffect(() => {
